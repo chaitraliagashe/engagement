@@ -5,7 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "engagement_parameter")
+@Table(name = "engagement_parameters")
 public class EngagementParameter {
 	@Id
 	private String postId;

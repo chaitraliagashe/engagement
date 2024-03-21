@@ -19,14 +19,19 @@ public class UserEngagementService {
 	private int MAX_RESULTS = 20;
 	
 	public EngagementParameter incrementLikes (String postId) {
-		EngagementParameter userEngagement = repository.findById(postId).orElse(new EngagementParameter(postId, 0, 0, 0));
-		long likes = userEngagement.getLikes() + 1;
-		userEngagement.setLikes(likes);
-		return repository.save(userEngagement);
+		Optional<EngagementParameter> userEngagement = repository.findById(postId);
+		if(userEngagement.isPresent()) {
+			long likes = userEngagement.get().getLikes() + 1;
+			userEngagement.get().setLikes(likes);
+			return repository.save(userEngagement.get());
+		} else {
+			return repository.save(new EngagementParameter(postId, 0, 0, 0));
+		}
+		
 	}
 	
 	public EngagementParameter decrementLikes(String postId) {
-		EngagementParameter userEngagement = repository.findById(postId).orElse(new EngagementParameter(postId, 0, 0, 0));
+		EngagementParameter userEngagement = repository.findById(postId).orElseGet(()-> new EngagementParameter(postId, 0, 0, 0));
 		if(userEngagement.getLikes() == 0) {
 			return repository.save(userEngagement);
 		}
@@ -36,7 +41,7 @@ public class UserEngagementService {
 	}
 	
 	public EngagementParameter incrementClicks (String postId) {
-		EngagementParameter userEngagement = repository.findById(postId).orElse(new EngagementParameter(postId, 0, 1, 0));
+		EngagementParameter userEngagement = repository.findById(postId).orElseGet(()-> new EngagementParameter(postId, 0, 0, 0));
 		long clicks = userEngagement.getClicks() + 1;
 		userEngagement.setClicks(clicks);
 		return repository.save(userEngagement);
