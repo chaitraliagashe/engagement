@@ -1,0 +1,114 @@
+---
+openapi: 3.0.0
+info:
+  title: Simple Post API
+  description: This is a simple API to get and modify user engagement for a blog post.
+  contact:
+    email: chaitraliagashe@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/ckulkarni/post-service/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /posts/getUserEngagementForPost:
+    get:
+      summary: returns the engagement parameters for the given blog post id
+      description: |
+        returns the engagement parameters for the given blog post id
+      operationId: getUserEngagementForPost
+      parameters:
+      - name: id
+        in: query
+        description: pass blog id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Blog posts written by the author
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        "400":
+          description: bad input parameter
+  /posts/getPopularPosts:
+    get:
+      summary: returns a list of blogs posts by their popularity
+      description: |
+        returns a list of blogs posts by their popularity - currently by number of likes. We further need to introduced pagination and also combination of parameters
+      operationId: getPopularPosts
+      parameters:
+      - name: id
+        in: query
+        description: pass post id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Blog posts written by the author
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        "400":
+          description: bad input parameter
+  /posts/incrementLikes:
+    post:
+      summary: Increments like count for a post
+      description: Increments like count for a post, in case this is the first like, new row is created if does not exist.
+      operationId: incrementLikes
+      parameters:
+      - name: id
+        in: query
+        description: pass post id
+        required: true
+        schema:
+          type: string
+      responses:
+        "201":
+          description: item created
+        "4XX":
+          description: "invalid input, object invalid"
+  /posts/decrementLikes:
+    post:
+      summary: decrements like count for a post
+      description: decrements like count for a post
+      operationId: decrementLikes
+      parameters:
+      - name: id
+        in: query
+        description: pass post id
+        required: true
+        schema:
+          type: string
+      responses:
+        "201":
+          description: item created
+        "4XX":
+          description: "invalid input, object invalid"
+  /posts/incrementClicks:
+    post:
+      summary: Increments clicks count for a post
+      description: Increments clicks count for a post, in case this is the first like, new row is created if does not exist.
+      operationId: incrementClicks
+      parameters:
+      - name: id
+        in: query
+        description: pass post id
+        required: true
+        schema:
+          type: string
+      responses:
+        "201":
+          description: item created
+        "4XX":
+          description: "invalid input, object invalid"    

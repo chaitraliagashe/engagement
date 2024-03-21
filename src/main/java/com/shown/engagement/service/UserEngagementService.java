@@ -19,15 +19,13 @@ public class UserEngagementService {
 	private int MAX_RESULTS = 20;
 	
 	public EngagementParameter incrementLikes (String postId) {
-		Optional<EngagementParameter> userEngagement = repository.findById(postId);
-		if(userEngagement.isPresent()) {
-			long likes = userEngagement.get().getLikes() + 1;
-			userEngagement.get().setLikes(likes);
-			return repository.save(userEngagement.get());
-		} else {
-			return repository.save(new EngagementParameter(postId, 0, 0, 0));
+		EngagementParameter userEngagement = repository.findById(postId).orElseGet(()-> new EngagementParameter(postId, 0, 0, 0));
+		if(userEngagement.getLikes() == 0) {
+			return repository.save(userEngagement);
 		}
-		
+		long likes = userEngagement.getLikes() + 1;
+		userEngagement.setLikes(likes);
+		return repository.save(userEngagement);
 	}
 	
 	public EngagementParameter decrementLikes(String postId) {
