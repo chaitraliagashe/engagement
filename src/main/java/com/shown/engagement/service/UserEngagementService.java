@@ -20,9 +20,6 @@ public class UserEngagementService {
 	
 	public EngagementParameter incrementLikes (String postId) {
 		EngagementParameter userEngagement = repository.findById(postId).orElseGet(()-> new EngagementParameter(postId, 0, 0, 0));
-		if(userEngagement.getLikes() == 0) {
-			return repository.save(userEngagement);
-		}
 		long likes = userEngagement.getLikes() + 1;
 		userEngagement.setLikes(likes);
 		return repository.save(userEngagement);
