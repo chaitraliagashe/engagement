@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,9 +42,12 @@ public class UserEngagementController {
 	}
 	
 	@GetMapping("/engagement/getPopularBlogs")
-	public List<EngagementParameter> getPopularBlogs() {
+	public List<EngagementParameter> getPopularBlogs(
+			@RequestParam(defaultValue = "20", required = false) Integer pageSize,
+			@RequestParam(defaultValue = "0", required = false) Integer page) {
 		try {
-			return service.getPopularBlogs();
+			Pageable paging  = PageRequest.of(page, pageSize);
+			return service.getPopularBlogs(paging);
 		} catch(Exception e) {
 			logger.error("Error finding the blogs", e);
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("No blogs could be found"));

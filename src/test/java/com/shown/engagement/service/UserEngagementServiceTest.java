@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.shown.engagement.model.EngagementParameter;
@@ -24,8 +26,6 @@ class UserEngagementServiceTest {
 	
 	@Autowired
 	private UserEngagementService service;
-	
-	private EngagementParameter engagementFromDb;
 	
 	@BeforeEach 
 	public void setUp() {
@@ -76,7 +76,7 @@ class UserEngagementServiceTest {
 		service.decrementLikes("65fc72d9d7269a7625591c2p");
 		engagement = repository.findById("65fc72d9d7269a7625591c2p");
 		assertTrue(engagement.isPresent());
-		assertEquals(1293, engagement.get().getLikes());
+		assertEquals(1292, engagement.get().getLikes());
 	}
 
 	@Test
@@ -84,7 +84,7 @@ class UserEngagementServiceTest {
 		Optional<EngagementParameter> engagement = repository.findById("65fc72d9d7269a7625591c2n");
 		assertTrue(engagement.isPresent());
 		service.incrementClicks("65fc72d9d7269a7625591c2n");
-		engagement = repository.findById("65fc72d9d7269a7625591c2p");
+		engagement = repository.findById("65fc72d9d7269a7625591c2n");
 		assertTrue(engagement.isPresent());
 		assertEquals(988, engagement.get().getClicks());
 	}
@@ -106,7 +106,7 @@ class UserEngagementServiceTest {
 		service.incrementClicks("65fc72d9d7269a7625591c2a");
 		engagement = repository.findById("65fc72d9d7269a7625591c2a");
 		assertTrue(engagement.isPresent());
-		assertEquals(1, engagement.get().getLikes());
+		assertEquals(1, engagement.get().getClicks());
 	}
 	
 	@Test
@@ -117,10 +117,18 @@ class UserEngagementServiceTest {
 
 	@Test
 	void testGetPopularBlogs() {
-		List<EngagementParameter> popular = service.getPopularBlogs();
+		Pageable paging  = PageRequest.of(0, 2);
+		List<EngagementParameter> popular = service.getPopularBlogs(paging);
+		assertEquals(2, popular.size());
+		assertEquals("65fc72d9d7269a7625591c2y", popular.get(0).getPostId());
+		paging  = PageRequest.of(0, 5);
+		popular = service.getPopularBlogs(paging);
+		assertEquals(5, popular.size());
+		assertEquals("65fc72d9d7269a7625591c2y", popular.get(0).getPostId());
+		paging  = PageRequest.of(0, 20);
+		popular = service.getPopularBlogs(paging);
 		assertEquals(20, popular.size());
 		assertEquals("65fc72d9d7269a7625591c2y", popular.get(0).getPostId());
-		
 	}
 
 }

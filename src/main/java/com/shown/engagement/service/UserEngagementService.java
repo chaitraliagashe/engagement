@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Limit;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.shown.engagement.model.EngagementParameter;
@@ -15,8 +15,6 @@ public class UserEngagementService {
 
 	@Autowired 
 	UserEngagementRepository repository;
-	
-	private int MAX_RESULTS = 20;
 	
 	public EngagementParameter incrementLikes (String postId) {
 		EngagementParameter userEngagement = repository.findById(postId).orElseGet(()-> new EngagementParameter(postId, 0, 0, 0));
@@ -50,8 +48,8 @@ public class UserEngagementService {
 		return engagement.get();
 	}
 	
-	public List<EngagementParameter> getPopularBlogs() {
-		return repository.findByOrderByLikesDesc(Limit.of(MAX_RESULTS));
+	public List<EngagementParameter> getPopularBlogs(Pageable paging) {
+		return repository.findByOrderByLikesDesc(paging);
 	}
 }
  
