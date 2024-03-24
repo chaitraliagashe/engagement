@@ -1,8 +1,6 @@
 package com.shown.engagement.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -34,8 +32,6 @@ class UserEngagementControllerTest {
 
 	@Autowired
 	private UserEngagementRepository repository;
-	
-	private EngagementParameter engagementFromDb;
 
 	@BeforeEach
 	void setUp() throws Exception {
